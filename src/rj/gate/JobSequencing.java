@@ -1,55 +1,48 @@
 package rj.gate;
-
-import java.util.Arrays;
+/*
+ * 
+ */
 
 public class JobSequencing {
-	static int arr[]={25,100,27,15};
-	static int ded[]={1,0,1,0};
+	static int profits[]={25,100,27,15};
+	static int dead_lines[]={1,0,1,0};
 	static int jobs[]={0,1,2,3};
-	static int profit = 0;
+	static int total_profit = 0;
+	static String text = "JOBS: ";
 	static boolean slots[];
 	public static void main(String[] args) {
-
-		sortJobs();
-
-		int max=ded[0];
-
-		for(int i=1;i<ded.length;i++){
-			if(max<ded[i])
-				max=ded[i];
-		}
-		//System.out.println();
-		slots = new boolean[max+1];
-	//	System.out.println("max: "+max);
-	//	System.out.println(Arrays.toString(slots));
-		String text = "JOBS: {";
+		//Sort jobs in decreasing order of profits
+		sortJobs();		
+		slots = new boolean[findMaxDed()];
 
 		for(int i=0,j=0; i < jobs.length ||j < slots.length;i++){
-			int  index = ded[i];
-		//	System.out.println("index: "+index);
-		
+			int  index = dead_lines[i];
 			if(isEmpty(index)){
 				slots[index]=true;
 				j++;
-				text=text+"j"+(jobs[i]+1)+",";
-				//System.out.println("jobs: "+(jobs[i]+1));					
-				profit+=arr[i];
+				text=text+"j"+(jobs[i])+" ";
+				total_profit+=profits[i];
 			}else{
 				if(isBelowAvailble(index)){
 					index = getBelowIndex(index);
 					slots[index]=true;
 					j++;
-					text+= (jobs[i]+1);
-					//System.out.println("jobs: "+(jobs[i]+1));					
-					profit+=arr[i];
-					}
-
+					text+= (jobs[i])+" ";
+					total_profit+=profits[i];
+				}
 			}
-
 		}
-		text=text+"}";
 		System.out.println(text);
-		System.out.println("PROFIT: "+profit);
+		System.out.println("PROFIT: "+total_profit);
+	}
+
+	private static int findMaxDed() {
+		int max=dead_lines[0];
+		for(int i=1;i<dead_lines.length;i++){
+			if(max<dead_lines[i])
+				max=dead_lines[i];
+		}	
+		return  max+1;
 	}
 
 	private static int getBelowIndex(int index) {
@@ -69,11 +62,11 @@ public class JobSequencing {
 
 	static void sortJobs(){
 		//sort jobs in decreasing order of profit
-		for(int i=0;i<arr.length;i++){
-			for(int j=0;j<arr.length-i-1;j++){
-				if(arr[j]<arr[j+1]){					
-					swap(arr,i,j);
-					swap(ded,i,j);
+		for(int i=0;i<profits.length;i++){
+			for(int j=0;j<profits.length-i-1;j++){
+				if(profits[j]<profits[j+1]){					
+					swap(profits,i,j);
+					swap(dead_lines,i,j);
 					swap(jobs,i,j);
 				}
 			}
