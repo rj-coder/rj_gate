@@ -1,1 +1,1 @@
-"# rj_gate" 
+GATE CODING
