@@ -1,1 +1,1 @@
-GATE CODING
+GATE CODING exmaples
